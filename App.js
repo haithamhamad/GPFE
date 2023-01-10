@@ -12,7 +12,8 @@ import {Appp} from "./Components/Login"
 import Map from "./Components/Map"
 import Maps from "./Components/SetMaps"
 import Hp from "./Components/HP"
-
+import Requests from "./Components/Requests"
+import NewReq from "./Components/NewReq";
 
 export default function App() {
   const AppStack = createStackNavigator();
@@ -27,8 +28,10 @@ export default function App() {
             <AppStack.Screen name="Maps" component={Maps} />
           <AppStack.Screen name="Login" component={Login} />
             <AppStack.Screen name="Signup" component={Signup} />
+            <AppStack.Screen name="Requests" component={Requests} />
             <AppStack.Screen name="MH" component={MH} />
             <AppStack.Screen name="Chat" component={Chat} />
+            <AppStack.Screen name="NewReq" component={NewReq} />
 
 
         </AppStack.Navigator>

@@ -1,12 +1,13 @@
 import * as React from "react";
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, Text, Image, TouchableOpacity, StyleSheet,TextInput} from 'react-native'
 import {Card, Header} from '@rneui/themed';
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Divider } from '@rneui/themed';
 
 
 
 export default function Profile(props){
-
+     let edit=false;
 
     return(
         <View >
@@ -29,14 +30,53 @@ export default function Profile(props){
             />
 
             <Card>
-                <Card.Title style={{fontSize: 40}}>{"Ahmad"}</Card.Title>
-                <Card.Divider/>
+
+
                 <View style={{position:"relative",alignItems:"center"}}>
 
-                    <Text >Pranshu Chittora</Text>
+                   <TextInput
+                   editable={edit}
+                   placeholder={"Ahmad"}
+                   style={styles.view3}
+                   />
+                    <Divider
+                    style={{ width: "80%", margin: 20 }}
+                    color="#333652"
+                    insetType="left"
+                    subHeaderStyle={{}}
+                    width={2}
+                    orientation="horizontal"
+                    />
+                    <TextInput
+                        editable={edit}
+                        placeholder={"Ahmad@gmail.com"}
+                        style={styles.view3}
+                    />
+                    <Divider
+                        style={{ width: "80%", margin: 20 }}
+                        color="#333652"
+                        insetType="left"
+                        subHeaderStyle={{}}
+                        width={2}
+                        orientation="horizontal"
+                    />
+                    <TextInput
 
-
+                        editable={edit}
+                        secureTextEntry={true}
+                        placeholder={""}
+                        style={styles.view3}
+                    />
+                    <Divider
+                        style={{ width: "80%", margin: 20 }}
+                        color="#333652"
+                        insetType="left"
+                        subHeaderStyle={{}}
+                        width={2}
+                        orientation="horizontal"
+                    />
                 </View>
+
             </Card>
 
 
@@ -81,6 +121,16 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 22,
         fontWeight: 'bold',
+    },
+    view3: {
+        display: "flex",
+        paddingTop: 13,
+        paddingBottom: 13,
+        paddingLeft: 20,
+        marginTop: 7,
+        borderRadius: 10,
+        width:'80%',
+        backgroundColor: "rgba(217, 217, 217, 1)",
     },
 
 

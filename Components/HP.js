@@ -169,9 +169,8 @@ function Cards(props){
         <View>
             <Dialog
                 isVisible={visible2}
-
             >
-                <View style={{position:"relativeS",alignItems:"center"}}>
+                <View style={{position:"relative",alignItems:"center"}}>
                 <TouchableOpacity onPress ={() =>  {
                     toggleDialog2();
                 }}  >
@@ -206,24 +205,7 @@ function Cards(props){
                         fontSize: "10",
                         fontWeight: 'bold' }}
                 />
-                {/*<Button*/}
-                {/*    title="location"*/}
-                {/*    onPress={() =>  {*/}
-                {/*        navigation.navigate('Maps')*/}
-                {/*    } }*/}
-                {/*    buttonStyle={{*/}
-                {/*        backgroundColor: '#333652',*/}
-                {/*        borderWidth: 2,*/}
-                {/*        borderColor: 'white',*/}
-                {/*        borderRadius: 30,*/}
-                {/*    }}*/}
-                {/*    containerStyle={{*/}
-                {/*        width: 80,*/}
-                {/*    }}*/}
-                {/*    titleStyle={{*/}
-                {/*        fontSize: "10",*/}
-                {/*        fontWeight: 'bold' }}*/}
-                {/*/>*/}
+
                     <TextInput style={styles.view3}  multiline={true}
                                numberOfLines={4} placeholder='Notes' placeholderTextColor="black"/>
                     <Button
@@ -268,7 +250,7 @@ function Cards(props){
 
 
 
-export default function HP(){
+export default function HP({navigation}){
 
     return(
 <View >
@@ -277,26 +259,19 @@ export default function HP(){
         centerComponent={{ text: 'Explore', style: styles.heading }}
         rightComponent={
             <View style={styles.headerRight}>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() =>  {navigation.navigate('NewReq')}}>
                     <Ionicons name="add-circle-outline" size={40} color="white" />
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={{ marginLeft: 10 }}
 
-                >
-                </TouchableOpacity>
             </View>
         }
         leftComponent={
             <View style={styles.headerRight}>
-                <TouchableOpacity >
+                <TouchableOpacity   onPress={() =>  {navigation.navigate('Requests')}}>
                     <Ionicons name="file-tray-outline" size={40} color="white" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{ marginLeft: 10 }}
 
-                >
                 </TouchableOpacity>
+
             </View>
         }
 
