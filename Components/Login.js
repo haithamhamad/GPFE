@@ -1,18 +1,89 @@
 import * as React from "react";
-import {View, StyleSheet, Text, TextInput,ImageBackground, Dimensions, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Text, TextInput, ImageBackground, Dimensions, TouchableOpacity, Alert} from "react-native";
 import {useSelector, useDispatch, Provider} from 'react-redux';
 import { setName, setPass } from '../redux/actions';
 import {Store} from '../redux/store'
 import {useNavigation} from "@react-navigation/native";
+import {useEffect, useState} from "react";
+import MyView from "./MyView";
+import {Button} from "@rneui/themed";
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+
 
 
 
 
 export const Appp = () => {
     const navigation = useNavigation();
-    const { name, pass } = useSelector(state => state.userReducer);
-    const dispatch = useDispatch();
-   return(
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isProv, setIsProv] = useState(true);
+    const [Response, setResponse] = useState({});
+
+
+    const getCustomer = async () => {
+        try {
+            const response = await fetch(`http://192.168.1.11:8083/user/getCustomer/${email}/${password}`);
+            const json = await response.json();
+            setResponse(json);
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    navigation.navigate('MH1',{
+                        username: json.userName,
+                        email: json.email,
+                        phoneNum: json.phoneNum,
+                        password:json.password
+                    });
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                });
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const getProvider = async () => {
+        try {
+            const response = await fetch(`http://192.168.1.11:8083/provider/getProvider/${email}/${password}`);
+            const json = await response.json();
+            setResponse(json);
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    navigation.navigate('MHP1',{
+                        username: json.userName,
+                        email: json.email,
+                        phoneNum: json.phoneNum,
+                        password:json.password,
+                        rating:json.quality,
+                        avlbl:json.availability,
+                    });
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage);
+                });
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const signin = () => {
+
+         if(isProv) getCustomer()
+         else getProvider()
+
+
+    };
+
+
+
+    return(
 
        <View>
 
@@ -26,7 +97,8 @@ export const Appp = () => {
                    </View>
 
                    <TextInput
-                       onChangeText={(value) => dispatch(setName(value))}
+                       value={email}
+                       onChangeText={text => setEmail(text)}
                        style={styles.view3}
                    />
                    <View style={styles.view4}>
@@ -34,11 +106,43 @@ export const Appp = () => {
                    </View>
                    <TextInput
                        secureTextEntry={true}
-                       onChangeText={(value) => dispatch(setPass(value))}
+                       value={password}
+                       onChangeText={text => setPassword(text)}
                        style={styles.view5} />
+                   <Button
+                       title="I'm a provider"
+                       onPress={  () =>  {
+                           setIsProv(false);
+
+                       }}
+                       buttonStyle={{
+                           backgroundColor: '#333652',
+                           borderWidth: 2,
+                           borderColor: 'white',
+                           borderRadius: 30,
+                       }}
+                       containerStyle={{
+                           width: 80,
+                       }}
+                       titleStyle={{
+                           fontSize: "10",
+                           fontWeight: 'bold' }}
+                   />
+                   {/*<MyView hide={isProv} style={{width:'60%',alignItems:"center"}}>*/}
+                   {/*    <Text>Enter your ID :</Text>*/}
+                   {/*<TextInput*/}
+                   {/*    onChangeText={}*/}
+                   {/*    placeholder={"ID"}*/}
+                   {/*    style={styles.view3}*/}
+                   {/*/></MyView>*/}
+
                    <View style={styles.view41}>
+
                        <TouchableOpacity   style={styles.view31}>
-                           <Text style={styles.view32}  onPress={() => navigation.navigate('MH')} >LOG IN</Text>
+                           <Text style={styles.view32}  onPress={() => {
+                                    signin()
+                               console.log("kkkkkkkkkkk")
+                              }} >LOG IN</Text>
                        </TouchableOpacity>
 
                    </View>
@@ -73,7 +177,7 @@ const styles = StyleSheet.create({
    card:{
      backgroundColor:"white",
        borderRadius:20,
-       height:'50%',
+       height:'60%',
        width:'100%',
        display: "flex",
        flexDirection: "column",

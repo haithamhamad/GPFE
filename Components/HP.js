@@ -1,21 +1,32 @@
 import * as React from "react";
-import {View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Dimensions, Alert} from 'react-native'
-import {Card, Header, Button, Dialog} from '@rneui/themed';
+import {View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Dimensions, Alert, FlatList} from 'react-native'
+import {Card, Header, Button, Dialog, Divider} from '@rneui/themed';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {useState} from "react";
-import {useNavigation} from "@react-navigation/native";
+import {useEffect, useState} from "react";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {auth} from "../firebase";
+import {signInWithEmailAndPassword} from "firebase/auth";
 
 
 
 
 
-function Cards(props){
+
+export function Cards(props){
+
     const navigation = useNavigation();
     let service =props.service;
+    let user =props.user
+    const [User,setUser]=useState('')
+    const [number,setNumber]=useState('')
+    const [date,setDate]=useState('')
+    const [notes,setNotes]=useState("")
     const isAvailable=service.status
     let available;
+
+
     if(isAvailable){
         available=<Text style={{color:"green"}}> Available </Text>;
     }else {
@@ -43,7 +54,7 @@ function Cards(props){
     };
 
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
+       setDate(date)
         hideDatePicker();
     };
 
@@ -52,11 +63,21 @@ function Cards(props){
       Alert.alert("you will receive conformation soon                  " +
           "                            Please set your location");
         toggleDialog2();
-        navigation.navigate('Maps')
-        //HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+        navigation.navigate('Maps1',
+            {
+                provider:service.ProviderName,
+                user: User,
+                number:number,
+                date:date,
+                notes:notes,
+                serviceName: service.serviceName,
+                id:service.id,
+            }
+
+            )
+
 
     };
-
 
 
 
@@ -67,9 +88,27 @@ function Cards(props){
         <Card.Title style={{fontSize: 40}}>{service.serviceName}</Card.Title>
         <Card.Divider/>
         <View style={{position:"relative",alignItems:"left"}}>
-            <Text style={{fontWeight:"bold"}}>{service.ProviderName} </Text>
-            <Text > {service.Price}</Text>
+            <Text style={{fontWeight:"bold"}}>Name: {service.ProviderName} </Text>
+            <Divider
+                style={{ width: "100%",paddingTop: 15 }}
+                color="#333652"
+                insetType="left"
+                subHeaderStyle={{}}
+                width={1}
+                orientation="horizontal"
+            />
+            <Text style={{fontWeight:"bold",paddingTop:15}}>Price: {service.Price}</Text>
+            <Divider
+                style={{ width: "100%",paddingTop: 15 }}
+                color="#333652"
+                insetType="left"
+                subHeaderStyle={{}}
+                width={1}
+                orientation="horizontal"
+            />
+            <Card.Divider/>
             {available}
+            <Card.Divider/>
             <View style={{flexDirection:"row"}}>
                 <Button
                     onPress={toggleDialog1}
@@ -90,11 +129,10 @@ function Cards(props){
                 />
                 <Button
                     onPress={() =>  {
-                        navigation.navigate('Map',{
+                        console.log('jjjjjj')
+                        navigation.navigate('Map1',{
                             latitude: service.latitude,
                             longitude: service.longitude,
-                            latitudeDelta: service.latitudeDelta,
-                            longitudeDelta: service.longitudeDelta,
 
                         });
                     }}
@@ -131,7 +169,26 @@ function Cards(props){
                 />
                 <Button
                     title="Chat"
-                    onPress={() =>  {navigation.navigate('Chat')}}
+                    onPress={() =>  {
+
+                        signInWithEmailAndPassword(auth, user.email, user.password)
+                            .then((userCredential) => {
+
+                                navigation.navigate('AnotherChat1',{
+
+                                    user1: 'prov1',
+                                    user2: 'user2',
+
+
+                                });
+                            }).catch((error) => {
+                            const errorCode = error.code;
+                            const errorMessage = error.message;
+                            alert("herrrrrrrrrrr")
+                            alert(errorMessage);
+                        });
+
+                    }}
                     buttonStyle={{
                         backgroundColor: '#333652',
                         borderWidth: 2,
@@ -148,7 +205,7 @@ function Cards(props){
 
             </View>
             <AirbnbRating
-
+                defaultRating={service.rating}
                 isDisabled
                 showRating={false}
             />
@@ -178,8 +235,8 @@ function Cards(props){
                 </TouchableOpacity>
                 </View>
                 <Dialog.Title title="Book"/>
-                <TextInput style={styles.view3} placeholder='Name' placeholderTextColor="black"/>
-                <TextInput style={styles.view3} placeholder='Phone Number' placeholderTextColor="black"/>
+                <TextInput style={styles.view3} placeholder='Name' onChangeText={text => setUser(text)} placeholderTextColor="black"/>
+                <TextInput style={styles.view3} placeholder='Phone Number' onChangeText={text => setNumber(text)} placeholderTextColor="black"/>
                 <DateTimePickerModal
                     display={"inline"}
                     style={{backgroundColor:"#333652",height:'80%'}}
@@ -207,6 +264,7 @@ function Cards(props){
                 />
 
                     <TextInput style={styles.view3}  multiline={true}
+                               onChangeText={text => setNotes(text)}
                                numberOfLines={4} placeholder='Notes' placeholderTextColor="black"/>
                     <Button
                         title="confirm"
@@ -251,6 +309,28 @@ function Cards(props){
 
 
 export default function HP({navigation}){
+    const route = useRoute();
+    const email = route.params.email
+    const password = route.params.password
+    const username = route.params.username
+    const phoneNum = route.params.phoneNum
+    console.log(username)
+
+
+    const [data, setData] = useState([]);
+    //localhost:8083/service/getAllServices
+    const getServices = async () => {
+        try {
+            const response = await fetch(`http://192.168.1.11:8083/service/getAllServices/customer`);
+            const json = await response.json();
+            setData(json);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    useEffect(() => {
+        getServices();
+    }, []);
 
     return(
 <View >
@@ -259,7 +339,7 @@ export default function HP({navigation}){
         centerComponent={{ text: 'Explore', style: styles.heading }}
         rightComponent={
             <View style={styles.headerRight}>
-                <TouchableOpacity onPress={() =>  {navigation.navigate('NewReq')}}>
+                <TouchableOpacity onPress={() =>  {navigation.navigate('NewReq1',{username:username})}}>
                     <Ionicons name="add-circle-outline" size={40} color="white" />
                 </TouchableOpacity>
 
@@ -267,7 +347,7 @@ export default function HP({navigation}){
         }
         leftComponent={
             <View style={styles.headerRight}>
-                <TouchableOpacity   onPress={() =>  {navigation.navigate('Requests')}}>
+                <TouchableOpacity   onPress={() =>  {navigation.navigate('Requests1',{username:username})}}>
                     <Ionicons name="file-tray-outline" size={40} color="white" />
 
                 </TouchableOpacity>
@@ -276,21 +356,33 @@ export default function HP({navigation}){
         }
 
     />
-    <Cards
-    service={{
-        serviceName:"elderly nurse",
-        ProviderName: "Ahmad",
-        Price:"50",
-        status:true,
-        rating:"3",
-        Description:"blah blah blah",
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+    <FlatList
+        style={{height:'75%'}}
+        data={data}
+        keyExtractor={({ id }, index) => id}
+        renderItem={({ item }) => (
+            <Cards
+                service={{
+                    serviceName:item.serviceName,
+                    id:item.id,
+                    ProviderName: item.userName,
+                    Price:item.price,
+                    status:item.status,
+                    rating: item.quality,
+                    Description:item.description,
+                    latitude: item.longtid,
+                    longitude: item.lati,
+                }}
+                user={{
+                    email:email,
+                    password: password
 
-    }}
+
+                }}
+            />
+        )}
     />
+
 
 
 </View>

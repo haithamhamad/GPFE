@@ -11,9 +11,7 @@ export default function Home({ navigation }) {
 
 
 
-    const _onFinish = () => {
-        // Alert.alert('Animation', 'It is done!');
-    };
+
     const [modalIsVisible,setModalIsVisible] = useState(false)
 
     return (
@@ -26,17 +24,17 @@ export default function Home({ navigation }) {
                 style={styles.view2}
                 time = {3000}
                 duration={2000}
-                onFinish={_onFinish}
+
             />
             <View style={styles.card}>
             <View style={styles.view4}>
                 <TouchableOpacity   style={styles.view31}>
-                    <Text style={styles.view32}  onPress={() => navigation.navigate('Login')}>LOG IN</Text>
+                    <Text style={styles.view32}  onPress={() => navigation.navigate('Login1')}>LOG IN</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.view4}>
                 <TouchableOpacity style={styles.view31}>
-                    <Text style={styles.view32} onPress={() => navigation.navigate('Signup')}>SIGN UP</Text>
+                    <Text style={styles.view32} onPress={() => navigation.navigate('Signup1')}>SIGN UP</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.view5}>
@@ -44,9 +42,10 @@ export default function Home({ navigation }) {
                     <Text style={styles.view6}>Become a service provider</Text>
                 </View>
                 <View style={styles.view7}>
-                    <Pressable>
-                        <Text style={styles.view32}>JOIN US NOW</Text>
-                    </Pressable>
+                    <TouchableOpacity   style={styles.view31}>
+                        <Text style={styles.view32}  onPress={() => navigation.navigate('JoinUs1')}>JOIN US NOW</Text>
+                    </TouchableOpacity>
+
                 </View>
             </View>
             </View>

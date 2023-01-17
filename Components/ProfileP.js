@@ -5,17 +5,17 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Divider } from '@rneui/themed';
 import {useState} from "react";
 import MyView from "./MyView";
-import {useNavigation, useRoute} from "@react-navigation/native";
+import {AirbnbRating} from "react-native-ratings";
+import {useNavigation} from "@react-navigation/native";
 
 
 
-export default function Profile(){
-    const navigation =useNavigation()
-          const route=useRoute()
-     const [edit,setEdit]= useState(false)
-    const [name,setName]= useState(route.params.username)
-    const [mail,setMail]= useState(route.params.email)
-    const [phoneNum,setNum]=useState(route.params.phoneNum)
+export default function ProfileP({props}){
+            const navigation =useNavigation()
+
+    const [edit,setEdit]= useState(false)
+    const [name,setName]= useState("ahmad")
+    const [mail,setMail]= useState("ahmad@gmail.com")
     const [isHidden,setIsHidden]=useState(true)
 
 
@@ -40,19 +40,19 @@ export default function Profile(){
 
 
                 <View style={{position:"relative",alignItems:"center"}}>
-                <Text style={{fontWeight:"bold"}}>Name</Text>
-                   <TextInput
-                   editable={edit}
-                   placeholder={name}
-                   style={styles.view3}
-                   />
+                    <Text style={{fontWeight:"bold"}}>Name</Text>
+                    <TextInput
+                        editable={edit}
+                        placeholder={name}
+                        style={styles.view3}
+                    />
                     <Divider
-                    style={{ width: "80%", margin: 20 }}
-                    color="#333652"
-                    insetType="left"
-                    subHeaderStyle={{}}
-                    width={2}
-                    orientation="horizontal"
+                        style={{ width: "80%", margin: 20 }}
+                        color="#333652"
+                        insetType="left"
+                        subHeaderStyle={{}}
+                        width={2}
+                        orientation="horizontal"
                     />
                     <Text style={{fontWeight:"bold"}}>Email</Text>
                     <TextInput
@@ -70,9 +70,10 @@ export default function Profile(){
                     />
                     <Text style={{fontWeight:"bold"}}>Phone number</Text>
                     <TextInput
+
                         editable={edit}
                         secureTextEntry={true}
-                        placeholder={phoneNum}
+                        placeholder={""}
                         style={styles.view3}
                     />
                     <Divider
@@ -83,33 +84,51 @@ export default function Profile(){
                         width={2}
                         orientation="horizontal"
                     />
-                    <MyView hide={isHidden}>
-                    <Button
-                        title="Save"
-                        onPress={  () =>  {
-                            fetch('https://63be74aae348cb07620f2965.mockapi.io/search', {
-                                method: 'POST',
-                                body: JSON.stringify({
-                                }),
-                            });
-                            Alert.alert('saved')
-                            setIsHidden(true)
-                            setEdit(false)
-                        }}
-                        buttonStyle={{
-                            backgroundColor: 'green',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                        }}
-                        containerStyle={{
-                            width: 80,
-                        }}
-                        titleStyle={{
-                            fontSize: "10",
-                            fontWeight: 'bold' }}
+                    <Text style={{fontWeight:"bold"}}>Your rating</Text>
+                    <AirbnbRating
+                        defaultRating={'5'}
+                        isDisabled
+                        showRating={false}
                     />
+                    <Divider
+                        style={{ width: "80%", margin: 20 }}
+                        color="#333652"
+                        insetType="left"
+                        subHeaderStyle={{}}
+                        width={2}
+                        orientation="horizontal"
+                    />
+
+                    <MyView hide={isHidden}>
+                        <Button
+                            title="Save"
+                            onPress={  () =>  {
+                                fetch('https://63be74aae348cb07620f2965.mockapi.io/search', {
+                                    method: 'POST',
+                                    body: JSON.stringify({
+                                    }),
+                                });
+                                Alert.alert('saved')
+                                setIsHidden(true)
+                                setEdit(false)
+                            }}
+                            buttonStyle={{
+                                backgroundColor: 'green',
+                                borderWidth: 2,
+                                borderColor: 'white',
+                                borderRadius: 30,
+                            }}
+                            containerStyle={{
+                                width: 80,
+                            }}
+                            titleStyle={{
+                                fontSize: "10",
+                                fontWeight: 'bold' }}
+                        />
                     </MyView>
+
+
+
 
                     <Button
                         title="LogOut"

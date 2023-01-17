@@ -1,10 +1,38 @@
 import * as React from "react";
-import {View, StyleSheet, Text, TextInput, Modal, Dimensions, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Text, TextInput, Modal, Dimensions, TouchableOpacity, Alert} from "react-native";
 import MyView from './MyView';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 import MapView, {Marker, Polygon} from "react-native-maps";
+import {useState} from "react";
+import {Button} from "@rneui/themed";
 
-export default  function SearchPage() {
+export default  function SearchPage(route) {
+
+
+    const [Price, setPrice] = useState(0);
+    const [Service, setService] = useState('');
+    const [avl, setavl] = useState(false);
+    const [loc, setState] = useState([]);
+    const [done, setDone]=useState(false)
+    if (done) {
+        fetch('https://63be74aae348cb07620f2965.mockapi.io/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                service: Service,
+                price: Price,
+                location: loc,
+                avlbl: avl ,
+            }),
+
+        });
+        console.log(JSON.stringify({
+            service: Service,
+            price: Price,
+            location: loc,
+            avlbl: avl,
+        }));
+        setDone(false);
+    }
     const [selected, setSelected] = React.useState([]);
             let isHiddenLoc=true;
     let isHiddenPr=true;
@@ -13,20 +41,18 @@ export default  function SearchPage() {
 
         {key:'1', value:'Location'},
         {key:'2', value:'Price'},
-        {key:'3', value:'Available'},
+        {key:'3', value:'Quality'},
 
     ]
       ;
     function show() {
         if (selected.includes('Location')){
-isHiddenLoc=false;
+                isHiddenLoc=false;
         }
 
         if (selected.includes('Price')){
              isHiddenPr=false;
         }
-
-
 
     }
 
@@ -45,14 +71,37 @@ isHiddenLoc=false;
     />
             <View style={{padding:5,flexDirection:"column"}}>
                 <Text style={{fontWeight:"bold"}}>Service Name: </Text>
+                <View style={{padding:5,flexDirection:"row"}}>
                 <TextInput
+                    onChangeText={newText => setService(newText)}
                     style={styles.view31}
                 />
+                    <Button
+                        title="Search"
+                        onPress={  () =>  {
+                            setDone(true)
+                        }}
+                        buttonStyle={{
+                            backgroundColor: '#333652',
+                            borderWidth: 2,
+                            borderColor: 'white',
+                            borderRadius: 30,
+                        }}
+                        containerStyle={{
+                            width: 80,
+                        }}
+                        titleStyle={{
+                            fontSize: "10",
+                            fontWeight: 'bold' }}
+                    />
+
+                </View>
             </View>
 
                 <MyView hide={isHiddenPr} style={{padding:5,flexDirection:"column"}}>
                 <Text style={{fontWeight:"bold"}}>No more than: </Text>
                 <TextInput
+                    onChangeText={newText => setPrice(newText)}
                     style={styles.view3}
                 />
                     </MyView>
@@ -63,8 +112,7 @@ isHiddenLoc=false;
 
                         latitude: 37.78825,
                         longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
+
 
                     }}
                 >
@@ -73,10 +121,9 @@ isHiddenLoc=false;
                             coordinate={{
                                 latitude: 37.78825,
                                 longitude: -122.4324,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421
+
                             }}
-                           // onDragEnd={(e) => setState({ x: e.nativeEvent.coordinate })}
+                            onDragEnd={(e) => setState({ x: e.nativeEvent.coordinate })}
 
                     />
 

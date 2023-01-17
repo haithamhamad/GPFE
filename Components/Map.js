@@ -7,11 +7,12 @@ import {
 import MapView, {Marker} from 'react-native-maps';
 import {Header} from "@rneui/themed";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
-export default function Map({route}) {
+export default function Map() {
 
-const {  latitude,longitude, latitudeDelta,longitudeDelta}=route.params;
+   const  route=useRoute()
+    console.log(route.params.longitude)
     const navigation = useNavigation();
     return (
         <View style={styles.body}>
@@ -33,18 +34,16 @@ const {  latitude,longitude, latitudeDelta,longitudeDelta}=route.params;
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude:  latitude,
-                    longitude: longitude,
-                    latitudeDelta:  latitudeDelta,
-                    longitudeDelta: longitudeDelta,
+                    latitude: route.params.longitude,
+                    longitude: route.params.latitude,
+
+
                 }}
             >  
                 <Marker
                  coordinate={{
-                     latitude:  latitude,
-                     longitude: longitude,
-                     latitudeDelta:  latitudeDelta,
-                     longitudeDelta: longitudeDelta,
+                     latitude:  route.params.longitude,
+                     longitude: route.params.latitude,
 
                  }}/>
             

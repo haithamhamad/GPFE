@@ -15,7 +15,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import {useEffect, useRef, useState} from "react";
 import PhoneInput from "react-native-phone-number-input";
 
-export default function Signup(navigation) {
+export default function JoinUs(navigation) {
 
     const [response, setResponse] = useState(false);
     const requestOptions = {
@@ -55,18 +55,20 @@ export default function Signup(navigation) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [qual, setQual] = useState('');
+
 
     //  const phoneInput = useRef<PhoneInput>(null);
     const [value, setValue] = useState("");
     const [formattedValue, setFormattedValue] = useState("");
     const [fl,setFl]=useState(false)
 
-        const onHandleSignup = () => {
-            if (email !== '' && password !== '') {
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => console.log('Signup success'))
-                    .catch((err) => Alert.alert("Login error", err.message));
-            }
+    const onHandleSignup = () => {
+        if (email !== '' && password !== '') {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => console.log('Signup success'))
+                .catch((err) => Alert.alert("Login error", err.message));
+        }
 
 
     }
@@ -74,84 +76,94 @@ export default function Signup(navigation) {
 
     return (
 
-    <View>
+        <View>
 
-        <View style={styles.view1}>
-            <ImageBackground source={require('../assets/maybe.png')} resizeMode="cover" style={styles.image}>
-            </ImageBackground>
+            <View style={styles.view1}>
+                <ImageBackground source={require('../assets/maybe.png')} resizeMode="cover" style={styles.image}>
+                </ImageBackground>
 
-            <View style={styles.card}>
-                <View style={styles.view2}>
+                <View style={styles.card}>
+                    <View style={styles.view2}>
 
-                    <Text>Name</Text>
-                </View>
+                        <Text>Name</Text>
+                    </View>
 
-                <TextInput
-                    value={name}
-                    onChangeText={text => setName(text)}
-                    style={styles.view3}
-                />
-                <View style={styles.view2}>
+                    <TextInput
+                        value={name}
+                        onChangeText={text => setName(text)}
+                        style={styles.view3}
+                    />
+                    <View style={styles.view2}>
 
-                    <Text>E-mail</Text>
-                </View>
+                        <Text>E-mail</Text>
+                    </View>
 
-                <TextInput
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.view3}
-                />
-                <View style={styles.view2}>
+                    <TextInput
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                        style={styles.view3}
+                    />
+                    <View style={styles.view2}>
 
-                    <Text>Phone Number</Text>
-                </View>
+                        <Text>Phone Number</Text>
+                    </View>
 
-                <PhoneInput
-                   // ref={phoneInput}
-                    containerStyle={{width:'90%',borderRadius:10,paddingTop:5}}
-                    defaultValue={value}
-                    defaultCode="PS"
-                    layout="first"
-                    onChangeText={(text) => {
-                        setValue(text);
-                    }}
-                    onChangeFormattedText={(text) => {
-                        setFormattedValue(text);
-                    }}
-                    withDarkTheme
-
-
-                />
+                    <PhoneInput
+                        // ref={phoneInput}
+                        containerStyle={{width:'90%',borderRadius:10,paddingTop:5}}
+                        defaultValue={value}
+                        defaultCode="PS"
+                        layout="first"
+                        onChangeText={(text) => {
+                            setValue(text);
+                        }}
+                        onChangeFormattedText={(text) => {
+                            setFormattedValue(text);
+                        }}
+                        withDarkTheme
 
 
-                <View style={styles.view4}>
-                    <Text >Password</Text>
-                </View>
-                <TextInput
-                    secureTextEntry={true}
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.view5} />
+                    />
 
 
-                <View style={styles.view41}>
+                    <View style={styles.view4}>
+                        <Text >Password</Text>
+                    </View>
+                    <TextInput
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style={styles.view5} />
+                    <View style={styles.view4}>
+                        <Text >Qualifications</Text>
+                    </View>
+                    <TextInput
+                       multiline={true}
+                        value={password}
+                        onChangeText={text => setQual(text)}
+                        style={styles.view51} />
 
-                    <TouchableOpacity   style={styles.view31}>
-                        <Text style={styles.view32}  onPress={() => {
-                            onHandleSignup()
+
+
+
+
+                    <View style={styles.view41}>
+                        <TouchableOpacity   style={styles.view31}>
+                            <Text style={styles.view32}  onPress={() => {
+                                onHandleSignup()
 
                                 //sendSignup();
 
-                          }} >Sign Up</Text>
-                    </TouchableOpacity>
+                            }} >Sign Up</Text>
+                        </TouchableOpacity>
+
+                    </View>
 
                 </View>
 
             </View>
 
         </View>
-
-    </View>
 
 
 
@@ -181,7 +193,7 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor:"white",
         borderRadius:20,
-        height:'80%',
+        height:'100%',
         width:'100%',
         display: "flex",
         flexDirection: "column",
@@ -262,6 +274,17 @@ const styles = StyleSheet.create({
         paddingBottom: 13,
         paddingLeft: 20,
         marginTop: 7,
+        width:'80%',
+        borderRadius: 10,
+        backgroundColor: "rgba(217, 217, 217, 1)",
+    },
+    view51: {
+        display: "flex",
+        paddingTop: 13,
+        paddingBottom: 5,
+        paddingLeft: 20,
+        marginTop: 7,
+        height:'29%',
         width:'80%',
         borderRadius: 10,
         backgroundColor: "rgba(217, 217, 217, 1)",

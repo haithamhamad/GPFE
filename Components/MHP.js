@@ -5,13 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Chats from "../Components/Chats"
 import SearchPage from "./SearchPage";
-import home from "../Components/HP"
-import Profile from "../Components/Profile"
+import home from "../Components/HPP"
+import ProfileP from "./ProfileP"
 import {useRoute} from "@react-navigation/native";
 
 
-
-export default function MH(){
+export default function MHP(){
     const route = useRoute();
     const email = route.params.email
     const phoneNum = route.params.phoneNum
@@ -19,15 +18,10 @@ export default function MH(){
     const password = route.params.password
 
 
-
-          // const phoneNumber = route.params.number
-
-
-    const Tab = createBottomTabNavigator();
+    const tab = createBottomTabNavigator();
     return(
 
-        <Tab.Navigator  screenOptions={{
-
+        <tab.Navigator screenOptions={{
             tabBarShowLabel: false,
             headerShown:false,
             tabBarStyle: {
@@ -44,34 +38,32 @@ export default function MH(){
                 ... styles.shadow
             }
         }}>
-            <Tab.Screen  name="home1" component={home} initialParams={{username:username,email:email,phoneNum:phoneNum,password:password}}  options={{
-
+            <tab.Screen  name="home" component={home} initialParams={{email,password,username}} options={{
 
                 tabBarIcon:({focused})=> (
-                <View style={styles.screen}>
-                    <Ionicons name="home-outline" size={40} color="white" />
-                 </View>
+                    <View style={styles.screen}>
+                        <Ionicons name="home-outline" size={40} color="white" />
+                    </View>
                 )
             }}
 
             />
-            <Tab.Screen name="Search1" component={SearchPage}  options={{
+            <tab.Screen name="Search" component={SearchPage} options={{
                 tabBarIcon:({focused})=> (
                     <View>
                         <Ionicons name="search-outline" size={40} color="white" />
                     </View>
                 )
             }} />
-            <Tab.Screen name="Chats1" component={Chats}
-             options={{
-                
+            <tab.Screen name="Chats" component={Chats} options={{
+
                 tabBarIcon:({focused})=> (
                     <View>
                         <Ionicons name="chatbox-outline" size={40} color="white" />
                     </View>
                 )
             }} />
-            <Tab.Screen  name="Profile1" component={Profile}   initialParams={{username:username,email:email,phoneNum:phoneNum,password:password}} options={{
+            <tab.Screen  name="ProfileP" component={ProfileP} options={{
 
                 tabBarIcon:({focused})=> (
                     <View>
@@ -80,7 +72,7 @@ export default function MH(){
                 )
             }} />
 
-        </Tab.Navigator>
+        </tab.Navigator>
 
 
 
@@ -92,14 +84,14 @@ export default function MH(){
 }
 const styles = StyleSheet.create({
     shadow: {
-    shadowColor:"#7f5dfo",
+        shadowColor:"#7f5dfo",
         shadowOffset:{
-        width:0,
+            width:0,
             height:10,
         },
         shadowOpacity:0.25,
         shadowRadius:3.5,
-    elevation:5
+        elevation:5
 
 
 

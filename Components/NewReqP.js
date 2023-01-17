@@ -3,38 +3,37 @@ import {View, Text, Image, TouchableOpacity, StyleSheet, TextInput, Alert} from 
 import {Button, Card, Header} from '@rneui/themed';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Divider } from '@rneui/themed';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {useCallback, useEffect, useState} from "react";
 import {useRoute} from "@react-navigation/native";
 import MapView, {Marker} from "react-native-maps";
 
 
 
-export default function NewReq({navigation}){
+export default function NewReqP({navigation}){
     const  route=useRoute()
     const [serviceName,setServiceName]= useState('')
     const [description,setDescription]= useState('')
     const [price,setPrice]=useState(0)
-    const [date,setDate]=useState('')
     const [long,setLong]=useState(0)
     const [lat,setLat]=useState(0)
     const [state,setState]=useState([])
     const [flag,setFlag] = useState(false)
+
+
     let json
     function isEmpty(obj) {
         return Object.keys(obj).length === 0;
     }
-
     useEffect(()=>{
-        if(!isEmpty(state)) {
-            let x = JSON.stringify(state)
-            console.log(x)
-            let y = x.substring(5, (x.length - 1))
+    if(!isEmpty(state)) {
+        let x = JSON.stringify(state)
+        console.log(x)
+        let y = x.substring(5, (x.length - 1))
 
-            json = JSON.parse(y)
-            setLong(json.longitude)
-            setLat(json.latitude)
-        }})
+        json = JSON.parse(y)
+        setLong(json.longitude)
+        setLat(json.latitude)
+    }})
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -46,59 +45,38 @@ export default function NewReq({navigation}){
             serviceName : serviceName,
             description:description,
             price: price,
-            time: date,
             longtid: long,
             lati:lat
         })
     };
 
     const createService=()=>{
-        if(flag){
-            console.log(route.params.username)
-            fetch(
-                `http://192.168.1.11:8083/service/createService?userNanme=${route.params.username}`, requestOptions)
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    console.log('hhhhhhhhhhhh')
-                    console.log(responseJson)
-                })
-                .catch((error) => {
+    if(flag){
+        console.log(route.params.username)
+        fetch(
+            `http://192.168.1.11:8083/service/createService?userNanme=${route.params.username}`, requestOptions)
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('hhhhhhhhhhhh')
+                console.log(responseJson)
+            })
+            .catch((error) => {
 
-                    console.error(error);
+                console.error(error);
 
 
-                })}
+            })}
     }
 
 
 
-
-
-
-
-
-
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-
-    const handleConfirm = (date) => {
-         setDate(date);
-        hideDatePicker();
-    };
 
     return(
         <View >
             <Header
                 backgroundColor="#333652"
                 centerComponent={{ text: 'Request new service', style: styles.heading }}
-               leftComponent={
+                leftComponent={
                     <View style={styles.headerRight}>
                         <TouchableOpacity  onPress ={() =>  {
                             navigation.goBack();
@@ -133,28 +111,11 @@ export default function NewReq({navigation}){
                         style={styles.view3}
                     />
                     <TextInput
-                        placeholder={"Proposed cost"}
+                        placeholder={"cost"}
                         onChangeText={text => setPrice(text)}
                         style={styles.view3}
                     />
-                    <View style={{flexDirection:"row",padding:10}}>
-                    <Button
-                        title="date"
-                        onPress={showDatePicker}
-                        buttonStyle={{
-                            backgroundColor: '#333652',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                        }}
-                        containerStyle={{
-                            width: 80,
-                        }}
-                        titleStyle={{
-                            fontSize: "10",
-                            fontWeight: 'bold' }}
-                    />
-                    </View>
+
                     <Divider
                         style={{ width: "80%", margin: 20 }}
                         color="#333652"
@@ -166,8 +127,10 @@ export default function NewReq({navigation}){
                     <Button
                         title="confirm"
                         onPress={  () =>  {
-                          setFlag(true)
+
+                        setFlag(true)
                             createService()
+
                         }}
                         buttonStyle={{
                             backgroundColor: 'green',
@@ -182,14 +145,7 @@ export default function NewReq({navigation}){
                             fontSize: "10",
                             fontWeight: 'bold' }}
                     />
-                    <DateTimePickerModal
-                        display={"inline"}
-                        style={{backgroundColor:"#333652",height:'80%'}}
-                        isVisible= {isDatePickerVisible}
-                        mode="datetime"
-                        onConfirm={handleConfirm}
-                        onCancel={hideDatePicker}
-                    />
+
                 </View>
 
             </Card>
