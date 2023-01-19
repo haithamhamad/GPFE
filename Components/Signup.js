@@ -14,23 +14,34 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import {useEffect, useRef, useState} from "react";
 import PhoneInput from "react-native-phone-number-input";
+import {useNavigation} from "@react-navigation/native";
 
-export default function Signup(navigation) {
+export default function Signup() {
+    const navigation= useNavigation()
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [value, setValue] = useState("");
 
     const [response, setResponse] = useState(false);
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+            userName:name,
             email : email,
-            name:name,
-            password: password,
-            phoneNumber: value
+            phoneNum: value,
+            password: password
+
         })
     };
+
+
+
     const sendSignup = ()=>{
         fetch(
-            'https://reqres.in/api/posts',requestOptions )
+            'http://192.168.1.11:8083/user/createCustomer/',requestOptions )
             .then(response => {
                 response.json()
                     .then(data => {
@@ -39,8 +50,8 @@ export default function Signup(navigation) {
             })
         if(response) {
             Alert.alert("Completed, please login!")
-            navigation.navigate('Home')
-        }else Alert.alert("invalid signup!")
+            navigation.navigate('Home1')
+        }
 
     }
 
@@ -52,20 +63,13 @@ export default function Signup(navigation) {
 
 
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    //  const phoneInput = useRef<PhoneInput>(null);
-    const [value, setValue] = useState("");
-    const [formattedValue, setFormattedValue] = useState("");
     const [fl,setFl]=useState(false)
 
         const onHandleSignup = () => {
             if (email !== '' && password !== '') {
                 createUserWithEmailAndPassword(auth, email, password)
-                    .then(() => console.log('Signup success'))
-                    .catch((err) => Alert.alert("Login error", err.message));
+                    .then(() => Alert.alert('Signup success'))
+                    .catch((err) => console.log("Login error", err.message));
             }
 
 
@@ -115,9 +119,7 @@ export default function Signup(navigation) {
                     onChangeText={(text) => {
                         setValue(text);
                     }}
-                    onChangeFormattedText={(text) => {
-                        setFormattedValue(text);
-                    }}
+
                     withDarkTheme
 
 
@@ -140,7 +142,7 @@ export default function Signup(navigation) {
                         <Text style={styles.view32}  onPress={() => {
                             onHandleSignup()
 
-                                //sendSignup();
+                            sendSignup();
 
                           }} >Sign Up</Text>
                     </TouchableOpacity>

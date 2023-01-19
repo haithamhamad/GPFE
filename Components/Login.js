@@ -9,6 +9,8 @@ import MyView from "./MyView";
 import {Button} from "@rneui/themed";
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import ToggleSwitch from "toggle-switch-react-native";
+import {Switch} from "@rneui/base";
 
 
 
@@ -21,7 +23,7 @@ export const Appp = () => {
     const [password, setPassword] = useState('');
     const [isProv, setIsProv] = useState(true);
     const [Response, setResponse] = useState({});
-
+    const toggleSwitch = () => setIsProv(previousState => !previousState);
 
     const getCustomer = async () => {
         try {
@@ -109,25 +111,16 @@ export const Appp = () => {
                        value={password}
                        onChangeText={text => setPassword(text)}
                        style={styles.view5} />
-                   <Button
-                       title="I'm a provider"
-                       onPress={  () =>  {
-                           setIsProv(false);
+                   <View style={{paddingTop:5,flexDirection:"row"}}>
+                       <Text style={{padding:10}}>I'm a provider</Text>
+                   <Switch
+                       trackColor={{false: '#767577', true: '#'}}
 
-                       }}
-                       buttonStyle={{
-                           backgroundColor: '#333652',
-                           borderWidth: 2,
-                           borderColor: 'white',
-                           borderRadius: 30,
-                       }}
-                       containerStyle={{
-                           width: 80,
-                       }}
-                       titleStyle={{
-                           fontSize: "10",
-                           fontWeight: 'bold' }}
+                       ios_backgroundColor="#3e3e3e"
+                       onValueChange={toggleSwitch}
+                       value={!isProv}
                    />
+                   </View>
                    {/*<MyView hide={isProv} style={{width:'60%',alignItems:"center"}}>*/}
                    {/*    <Text>Enter your ID :</Text>*/}
                    {/*<TextInput*/}
@@ -135,8 +128,11 @@ export const Appp = () => {
                    {/*    placeholder={"ID"}*/}
                    {/*    style={styles.view3}*/}
                    {/*/></MyView>*/}
-
+                   <TouchableOpacity>
+                       <Text style={{color:"blue"}}>Forgot password?</Text>
+                   </TouchableOpacity>
                    <View style={styles.view41}>
+
 
                        <TouchableOpacity   style={styles.view31}>
                            <Text style={styles.view32}  onPress={() => {

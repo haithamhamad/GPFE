@@ -62,7 +62,7 @@ export default function MH(){
                     </View>
                 )
             }} />
-            <Tab.Screen name="Chats1" component={Chats}
+            <Tab.Screen name="Chats1" component={Chats} initialParams={{username:username}}
              options={{
                 
                 tabBarIcon:({focused})=> (

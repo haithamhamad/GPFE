@@ -12,6 +12,7 @@ export default function Home({ navigation }) {
 
 
 
+
     const [modalIsVisible,setModalIsVisible] = useState(false)
 
     return (

@@ -14,6 +14,7 @@ import {signInWithEmailAndPassword} from "firebase/auth";
 
 
 
+
 export function Cards(props){
 
     const navigation = useNavigation();
@@ -23,7 +24,7 @@ export function Cards(props){
     const [number,setNumber]=useState('')
     const [date,setDate]=useState('')
     const [notes,setNotes]=useState("")
-    const isAvailable=service.status
+    const isAvailable=true
     let available;
 
 
@@ -170,14 +171,15 @@ export function Cards(props){
                 <Button
                     title="Chat"
                     onPress={() =>  {
-
+                           console.log(user.username+service.userName+"11111")
                         signInWithEmailAndPassword(auth, user.email, user.password)
                             .then((userCredential) => {
 
                                 navigation.navigate('AnotherChat1',{
 
-                                    user1: 'prov1',
-                                    user2: 'user2',
+                                    user1: user.username,
+                                    user2: service.ProviderName,
+                                    isNew:true,
 
 
                                 });
@@ -318,7 +320,7 @@ export default function HP({navigation}){
 
 
     const [data, setData] = useState([]);
-    //localhost:8083/service/getAllServices
+
     const getServices = async () => {
         try {
             const response = await fetch(`http://192.168.1.11:8083/service/getAllServices/customer`);
@@ -375,7 +377,8 @@ export default function HP({navigation}){
                 }}
                 user={{
                     email:email,
-                    password: password
+                    password: password,
+                    username:username
 
 
                 }}

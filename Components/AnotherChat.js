@@ -26,7 +26,8 @@ export default function AnotherChat() {
     const route = useRoute();
     const user1=route.params.user1
     const user2= route.params.user2
-    console.log(user2)
+    const isNew=route.params.isNew
+    console.log(user1+user2)
 
 
 
@@ -99,6 +100,7 @@ export default function AnotherChat() {
     }, []);
 
     const onSend = useCallback((messages = []) => {
+     
         setMessages(previousMessages =>
             GiftedChat.append(previousMessages, messages)
         );
@@ -110,30 +112,29 @@ export default function AnotherChat() {
             text,
             user
         });
+
+
     }, []);
 
-    console.log(messages.length)
-
-    setTimeout(function (){
-        console.log(messages.length)
-
-        if(messages.length === 0) {
-
-            addDoc(collection(database, user1), {
-                _id: roomId,
-                user1: user1,
-                user2: user2
-
-            });
-            addDoc(collection(database, user2), {
-                _id: roomId,
-                user1: user2,
-                user2: user1
-            });
 
 
 
-    }},3000);
+      if(isNew) {
+          useEffect(()=>{
+
+          addDoc(collection(database, user1), {
+              _id: roomId,
+              user1: user1,
+              user2: user2
+
+          });
+          addDoc(collection(database, user2), {
+              _id: roomId,
+              user1: user2,
+              user2: user1
+          });
+      })}
+
 
 
 

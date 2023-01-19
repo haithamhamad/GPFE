@@ -6,16 +6,19 @@ import { Divider } from '@rneui/themed';
 import {useState} from "react";
 import MyView from "./MyView";
 import {AirbnbRating} from "react-native-ratings";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import ToggleSwitch from "toggle-switch-react-native";
 
 
 
 export default function ProfileP({props}){
             const navigation =useNavigation()
+    const route = useRoute()
 
     const [edit,setEdit]= useState(false)
-    const [name,setName]= useState("ahmad")
-    const [mail,setMail]= useState("ahmad@gmail.com")
+    const [name,setName]= useState(route.params.username)
+    const [mail,setMail]= useState(route.params.email)
+    const [phoneNum,setNum]=useState(route.params.phoneNum)
     const [isHidden,setIsHidden]=useState(true)
 
 
@@ -40,6 +43,15 @@ export default function ProfileP({props}){
 
 
                 <View style={{position:"relative",alignItems:"center"}}>
+                    <ToggleSwitch
+                        isOn={true}
+                        onColor="green"
+                        offColor="red"
+                        label="Active"
+                        labelStyle={{ color: "black", fontWeight: "900" }}
+                        size="large"
+                        onToggle={isOn => console.log("changed to : ", isOn)}
+                    />
                     <Text style={{fontWeight:"bold"}}>Name</Text>
                     <TextInput
                         editable={edit}
@@ -73,7 +85,7 @@ export default function ProfileP({props}){
 
                         editable={edit}
                         secureTextEntry={true}
-                        placeholder={""}
+                        placeholder={phoneNum}
                         style={styles.view3}
                     />
                     <Divider
@@ -86,7 +98,7 @@ export default function ProfileP({props}){
                     />
                     <Text style={{fontWeight:"bold"}}>Your rating</Text>
                     <AirbnbRating
-                        defaultRating={'5'}
+                        defaultRating={route.params.rating}
                         isDisabled
                         showRating={false}
                     />

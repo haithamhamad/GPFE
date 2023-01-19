@@ -18,19 +18,31 @@ import PhoneInput from "react-native-phone-number-input";
 export default function JoinUs(navigation) {
 
     const [response, setResponse] = useState(false);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [qual, setQual] = useState('');
+    const [value, setValue] = useState("");
+
+
+
+
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+            userName:name,
             email : email,
-            name:name,
+            phoneNum: value,
             password: password,
-            phoneNumber: value
+            qualifications:qual,
+            quality:"5",
+            availability:true
         })
     };
     const sendSignup = ()=>{
         fetch(
-            'https://reqres.in/api/posts',requestOptions )
+            'http://192.168.1.11:8083/provider/createProvider/',requestOptions )
             .then(response => {
                 response.json()
                     .then(data => {
@@ -38,9 +50,9 @@ export default function JoinUs(navigation) {
                     });
             })
         if(response) {
-            Alert.alert("Completed, please login!")
-            navigation.navigate('Home')
-        }else Alert.alert("invalid signup!")
+
+            navigation.navigate('Home1')
+        }
 
     }
 
@@ -52,14 +64,11 @@ export default function JoinUs(navigation) {
 
 
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [qual, setQual] = useState('');
+
 
 
     //  const phoneInput = useRef<PhoneInput>(null);
-    const [value, setValue] = useState("");
+
     const [formattedValue, setFormattedValue] = useState("");
     const [fl,setFl]=useState(false)
 
@@ -67,7 +76,7 @@ export default function JoinUs(navigation) {
         if (email !== '' && password !== '') {
             createUserWithEmailAndPassword(auth, email, password)
                 .then(() => console.log('Signup success'))
-                .catch((err) => Alert.alert("Login error", err.message));
+                .catch((err) => console.log("Login error", err.message));
         }
 
 
@@ -139,7 +148,7 @@ export default function JoinUs(navigation) {
                     </View>
                     <TextInput
                        multiline={true}
-                        value={password}
+
                         onChangeText={text => setQual(text)}
                         style={styles.view51} />
 
@@ -150,9 +159,9 @@ export default function JoinUs(navigation) {
                     <View style={styles.view41}>
                         <TouchableOpacity   style={styles.view31}>
                             <Text style={styles.view32}  onPress={() => {
-                                onHandleSignup()
-
-                                //sendSignup();
+                               onHandleSignup()
+Alert.alert("We have your request ! please wait for a conformation E-mail")
+                                sendSignup();
 
                             }} >Sign Up</Text>
                         </TouchableOpacity>

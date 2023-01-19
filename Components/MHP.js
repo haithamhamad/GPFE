@@ -10,12 +10,16 @@ import ProfileP from "./ProfileP"
 import {useRoute} from "@react-navigation/native";
 
 
+
 export default function MHP(){
     const route = useRoute();
     const email = route.params.email
     const phoneNum = route.params.phoneNum
     const username = route.params.username
     const password = route.params.password
+    const rating = route.params.rating
+
+
 
 
     const tab = createBottomTabNavigator();
@@ -48,14 +52,14 @@ export default function MHP(){
             }}
 
             />
-            <tab.Screen name="Search" component={SearchPage} options={{
-                tabBarIcon:({focused})=> (
-                    <View>
-                        <Ionicons name="search-outline" size={40} color="white" />
-                    </View>
-                )
-            }} />
-            <tab.Screen name="Chats" component={Chats} options={{
+            {/*<tab.Screen name="Search" component={SearchPage} options={{*/}
+            {/*    tabBarIcon:({focused})=> (*/}
+            {/*        <View>*/}
+            {/*            <Ionicons name="search-outline" size={40} color="white" />*/}
+            {/*        </View>*/}
+            {/*    )*/}
+            {/*}} />*/}
+            <tab.Screen name="Chats" component={Chats} initialParams={{username:username}} options={{
 
                 tabBarIcon:({focused})=> (
                     <View>
@@ -63,7 +67,7 @@ export default function MHP(){
                     </View>
                 )
             }} />
-            <tab.Screen  name="ProfileP" component={ProfileP} options={{
+            <tab.Screen  name="ProfileP" component={ProfileP}  initialParams={{username:username,email:email,phoneNum:phoneNum,rating:rating}} options={{
 
                 tabBarIcon:({focused})=> (
                     <View>

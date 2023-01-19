@@ -19,10 +19,12 @@ import NewChat from './Components/NewChat'
 import AnotherChat from "./Components/AnotherChat";
 import JoinUs from "./Components/JoinUs";
 import NewReqP from "./Components/NewReqP";
+import Results from "./Components/Results";
 
 
 
 export default function App() {
+
   const AppStack = createStackNavigator();
   return (
 
@@ -45,6 +47,7 @@ export default function App() {
           <AppStack.Screen name="AnotherChat1" component={AnotherChat} />
           <AppStack.Screen name="JoinUs1" component={JoinUs} />
           <AppStack.Screen name="NewReqP1" component={NewReqP} />
+          <AppStack.Screen name="Results1" component={Results} />
 
 
 

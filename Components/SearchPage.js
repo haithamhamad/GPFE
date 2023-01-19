@@ -3,36 +3,80 @@ import {View, StyleSheet, Text, TextInput, Modal, Dimensions, TouchableOpacity, 
 import MyView from './MyView';
 import { MultipleSelectList } from 'react-native-dropdown-select-list'
 import MapView, {Marker, Polygon} from "react-native-maps";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "@rneui/themed";
+import {useNavigation} from "@react-navigation/native";
 
 export default  function SearchPage(route) {
 
-
+    const navigation=useNavigation()
     const [Price, setPrice] = useState(0);
     const [Service, setService] = useState('');
     const [avl, setavl] = useState(false);
-    const [loc, setState] = useState([]);
     const [done, setDone]=useState(false)
-    if (done) {
-        fetch('https://63be74aae348cb07620f2965.mockapi.io/search', {
-            method: 'POST',
-            body: JSON.stringify({
-                service: Service,
-                price: Price,
-                location: loc,
-                avlbl: avl ,
-            }),
+    const [long,setLong]=useState(0)
+    const [lat,setLat]=useState(0)
+    const [flag,setFlag] = useState(false)
+    const [datta,setData]=useState([])
+    const [state,setState]=useState([])
 
-        });
-        console.log(JSON.stringify({
-            service: Service,
-            price: Price,
-            location: loc,
-            avlbl: avl,
-        }));
-        setDone(false);
+    let json
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0;
     }
+    useEffect(()=>{
+        if(!isEmpty(state)) {
+            let x = JSON.stringify(state)
+            console.log(x)
+            let y = x.substring(5, (x.length - 1))
+
+            json = JSON.parse(y)
+            setLong(json.longitude)
+            setLat(json.latitude)
+        }})
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify( {
+            type: Service,
+            price: Price,
+            longtid:long,
+            lati:lat,
+            available: true ,
+            quality:5
+        })
+    };
+
+    const searchService=()=>{
+        if(flag){
+            fetch(
+                `http://192.168.1.11:8083/service/find`, requestOptions)
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    setData(responseJson)
+
+                })
+                .catch((error) => {
+
+                    console.error(error);
+
+                })
+
+            setFlag(false)
+            navigation.navigate('Results1',{
+                data:datta,
+            })
+
+        }
+
+
+    }
+
+
+
     const [selected, setSelected] = React.useState([]);
             let isHiddenLoc=true;
     let isHiddenPr=true;
@@ -79,7 +123,8 @@ export default  function SearchPage(route) {
                     <Button
                         title="Search"
                         onPress={  () =>  {
-                            setDone(true)
+                            setFlag(true)
+                            searchService()
                         }}
                         buttonStyle={{
                             backgroundColor: '#333652',

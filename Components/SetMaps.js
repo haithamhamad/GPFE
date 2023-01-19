@@ -34,16 +34,6 @@ export default function SetMaps() {
     function isEmpty(obj) {
         return Object.keys(obj).length === 0;
     }
-    // if(!isEmpty(state)) {
-    //     let x = JSON.stringify(state)
-    //     console.log(x)
-    //     let y = x.substring(5, (x.length - 1))
-    //
-    //     json = JSON.parse(y)
-    //     setLong(json.longitude)
-    //     setLat(json.latitude)
-    // }
-
     useEffect(()=>{
         if(!isEmpty(state)) {
             let x = JSON.stringify(state)

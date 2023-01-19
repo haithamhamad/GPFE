@@ -20,7 +20,7 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../firebase";
-
+import ToggleSwitch from 'toggle-switch-react-native'
 
 
 
@@ -32,8 +32,35 @@ function Cards(props){
     let customer =props.customer;
     let user =props.user
 
-    const confirm=()=>{
+    const postB={
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify( {
+            serviceUserName: user.username,
+            nameOfCustomer:customer.username,
+            idOfService: customer.id,
+            nameOfService:customer.serviceName,
+            lati:customer.latitude,
+            longtid:customer.longitude,
+            time: customer.date,
+            notes:customer.description,
+        })
 
+
+
+    }
+
+
+
+
+
+    const confirm=()=>{
+        fetch(
+            `http://192.168.1.11:8083/poke/forcePokeService`, postB)
+            .then((response) => response.json())
 
     };
 
@@ -47,12 +74,11 @@ function Cards(props){
                 <Card.Title style={{fontSize: 40}}>{customer.serviceName}</Card.Title>
                 <Card.Divider/>
                 <View style={{position:"relative",alignItems:"left"}}>
-                    <Text style={{fontWeight:"bold"}}>{customer.username} </Text>
-                    {/*<Card.Divider/>*/}
-                    {/*<Text > {customer.customerNumber}</Text>*/}
-                    {/*<Card.Divider/>*/}
-                    {/*<Text > {customer.Date}</Text>*/}
-                    {/*<Card.Divider/>*/}
+                    <Text style={{fontWeight:"bold"}}>Name: {customer.username} </Text>
+
+                    <Card.Divider/>
+                    <Text >Time: {customer.date}</Text>
+                    <Card.Divider/>
                     <TextInput
                         style={styles.view3}
                         placeholderTextColor={'black'}
@@ -142,22 +168,7 @@ function Cards(props){
                             fontSize: "10",
                             fontWeight: 'bold' }}
                     />
-                    <Button
-                        title="Reject"
-                        onPress={confirm}
-                        buttonStyle={{
-                            backgroundColor: 'red',
-                            borderWidth: 2,
-                            borderColor: 'white',
-                            borderRadius: 30,
-                        }}
-                        containerStyle={{
-                            width: 80,
-                        }}
-                        titleStyle={{
-                            fontSize: "10",
-                            fontWeight: 'bold' }}
-                    />
+
                     </View>
 
 
@@ -184,6 +195,7 @@ export default function HPP({navigation}){
     const password = route.params.password
     const username = route.params.username
     const phoneNum = route.params.phoneNum
+
 
     const [data, setData] = useState([]);
     const getServices = async () => {
@@ -233,19 +245,22 @@ export default function HPP({navigation}){
                 renderItem={({ item }) => (
                     <Cards
                         customer={{
+                            id: item.id,
                             serviceName:item.serviceName,
-                            username: item.username,
+                            username: item.userName,
                             Price:item.price,
                             status:item.status,
                             rating: item.quality,
                             Description:item.description,
+                            date: item.time,
                             latitude: item.longtid,
                             longitude: item.lati,
 
                         }}
                         user={{
                             email:email,
-                            password: password
+                            password: password,
+                            username:username
 
 
                         }}

@@ -5,17 +5,18 @@ import {useEffect, useLayoutEffect, useState} from "react";
 import {collection, onSnapshot, orderBy, query} from "firebase/firestore";
 import {database} from "../firebase";
 import {Button, Header} from "@rneui/base";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 
 
 export default function Chats(){
     const [chat,setChat]=useState([])
      const navigation =useNavigation();
+    const route=useRoute()
 
     useEffect(() => {
 
-        const collectionRef = collection(database, 'prov1');
+        const collectionRef = collection(database, route.params.username);
         const q = query(collectionRef);
 
         const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -46,15 +47,16 @@ export default function Chats(){
             <Card containerStyle={{borderRadius:15}} >
                 <View style={{flexDirection:"row",display:"flex"}}>
                 <View style={{position:"relative",alignItems:"left",paddingTop:5 ,paddingRight:240}}>
-                    <Text  style={{paddingTop:5,fontSize:18,fontWeight:"bold"}}>Saeed</Text>
+                    <Text  style={{paddingTop:5,fontSize:18,fontWeight:"bold"}}>{item.user}</Text>
                     {/*{item.user}*/}
                 </View>
                 <Button
                     buttonStyle={{borderRadius:15,backgroundColor:'#333652'}}
                     onPress={ ()=>{
                     navigation.navigate('AnotherChat1',
-                        {   user1: 'prov1',
+                        {   user1: route.params.username,
                             user2: item.user,
+                            isNew: false
                         })
                 }
                 } >chat </Button>
